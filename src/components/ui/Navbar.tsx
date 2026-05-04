@@ -39,14 +39,7 @@ export default function Navbar() {
         <div className="container-wide" style={{ height: "100%", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           {/* Logo */}
           <Link href="/" style={{ textDecoration: "none", display: "flex", alignItems: "center", gap: "10px" }}>
-            <div style={{
-              width: 36, height: 36, borderRadius: 8,
-              background: "linear-gradient(135deg, #dc2626, #7f1d1d)",
-              display: "flex", alignItems: "center", justifyContent: "center",
-              boxShadow: "0 0 20px rgba(220,38,38,0.4)",
-            }}>
-              <Zap size={18} color="#111111" strokeWidth={2.5} />
-            </div>
+            <img src="/tcc-logo.png" alt="TCC Logo" style={{ height: 36, width: "auto", borderRadius: 8 }} />
             <div>
               <span style={{
                 fontFamily: "var(--font-display)",
@@ -83,9 +76,6 @@ export default function Navbar() {
 
           {/* CTA Buttons */}
           <div style={{ display: "flex", alignItems: "center", gap: "10px" }} className="hidden-mobile">
-            <Link href="/admin" className="btn-ghost" style={{ fontSize: "0.8rem" }}>
-              Dashboard
-            </Link>
             <Link href="/contact" className="btn-primary" style={{ padding: "10px 20px", fontSize: "0.85rem" }}>
               Book a Call
               <ChevronRight size={14} />

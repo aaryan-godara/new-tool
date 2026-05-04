@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 };
 
 const TEAM = [
-  { name: "Aryan Sharma", role: "Founder & CEO", bio: "10+ years in digital marketing. Built 3 successful agencies.", emoji: "👑" },
+  { name: "Aryan Godara", role: "Founder & CEO", bio: "10+ years in digital marketing. Built 3 successful agencies.", emoji: "👑" },
   { name: "Priya Kapoor", role: "Head of Creator Relations", bio: "Former talent manager with a network of 1000+ creators.", emoji: "⚡" },
   { name: "Rahul Dev", role: "Head of Analytics & AI", bio: "Data scientist turned marketer. Built TCC's AI content systems.", emoji: "🤖" },
   { name: "Sneha Iyer", role: "Campaign Director", bio: "Managed ₹50Cr+ in creator campaigns across 15+ industries.", emoji: "🎯" },
@@ -60,22 +60,22 @@ export default function AboutPage() {
                 <div className="section-badge" style={{ marginBottom: 20 }}>Our Story</div>
                 <h2 className="section-title">Built by marketers,<br /><span className="text-gradient-red">for results-obsessed brands.</span></h2>
                 <p style={{ color: "rgba(17,17,17,0.6)", lineHeight: 1.8, marginBottom: 20 }}>
-                  TCC was founded in 2022 with a single mission: make influencer marketing predictable, scalable, and genuinely profitable for brands of every size.
+                  TCC was founded in 2025 with a single mission: make influencer marketing predictable, scalable, and genuinely profitable for brands of every size.
                 </p>
                 <p style={{ color: "rgba(17,17,17,0.6)", lineHeight: 1.8, marginBottom: 20 }}>
                   We've spent years building a proprietary creator network, AI-powered campaign systems, and analytics infrastructure that most agencies can't match.
                 </p>
                 <p style={{ color: "rgba(17,17,17,0.6)", lineHeight: 1.8 }}>
-                  Today, TCC manages 200+ active campaigns, works with 500+ vetted creators, and has generated over ₹50 Crore in measurable revenue for our clients.
+                  Today, TCC manages 20+ active campaigns, works with 100+ vetted creators, and has generated over ₹1Cr+ in measurable revenue for our clients.
                 </p>
               </div>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
                 {[
-                  { label: "Founded", value: "2022" },
-                  { label: "Team Members", value: "28+" },
-                  { label: "Clients Served", value: "200+" },
-                  { label: "Creator Network", value: "500+" },
-                  { label: "Revenue Generated", value: "₹50Cr+" },
+                  { label: "Founded", value: "2025" },
+                  { label: "Team Members", value: "10" },
+                  { label: "Clients Served", value: "20+" },
+                  { label: "Creator Network", value: "100+" },
+                  { label: "Revenue Generated", value: "₹1Cr+" },
                   { label: "Retention Rate", value: "98%" },
                 ].map(s => (
                   <div key={s.label} style={{

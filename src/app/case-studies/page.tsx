@@ -4,6 +4,7 @@ import { CASE_STUDIES } from "@/lib/constants";
 import { ArrowRight, TrendingUp, Users, Zap, DollarSign } from "lucide-react";
 import Link from "next/link";
 import type { Metadata } from "next";
+import ClientCaseStudies from "./ClientCaseStudies";
 
 export const metadata: Metadata = {
   title: "Case Studies — Real Results from TCC Campaigns",
@@ -35,57 +36,9 @@ export default function CaseStudiesPage() {
           </div>
         </section>
 
-        <section style={{ padding: "60px 0 120px" }}>
-          <div className="container">
-            <div style={{ display: "flex", flexDirection: "column", gap: 32 }}>
-              {CASE_STUDIES.map((study, i) => (
-                <div key={study.id} className="glass" style={{ borderRadius: 24, overflow: "hidden", display: "grid", gridTemplateColumns: i % 2 === 0 ? "1fr 1fr" : "1fr 1fr" }}>
-                  <div style={{ background: "linear-gradient(135deg, rgba(220,38,38,0.18), rgba(255,255,255,0.9))", padding: "48px 40px", display: "flex", flexDirection: "column", justifyContent: "space-between", order: i % 2 === 0 ? 0 : 1, position: "relative", overflow: "hidden" }}>
-                    <div style={{ position: "absolute", top: -40, right: -40, width: 200, height: 200, borderRadius: "50%", background: "radial-gradient(circle, rgba(220,38,38,0.18), transparent 70%)", pointerEvents: "none" }} />
-                    <div>
-                      <div style={{ display: "inline-block", padding: "4px 12px", background: "rgba(220,38,38,0.15)", border: "1px solid rgba(220,38,38,0.25)", borderRadius: 100, fontSize: "0.7rem", fontWeight: 600, color: "#f87171", letterSpacing: "0.08em", textTransform: "uppercase" as const, marginBottom: 16 }}>{study.category}</div>
-                      <h2 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(1.4rem,2.5vw,2rem)", fontWeight: 800, color: "#111111", marginBottom: 12, lineHeight: 1.2 }}>{study.brand}</h2>
-                      <p style={{ color: "rgba(17,17,17,0.6)", fontSize: "0.95rem", lineHeight: 1.7, marginBottom: 16 }}>{study.summary}</p>
-                      <p style={{ color: "rgba(17,17,17,0.45)", fontSize: "0.875rem", lineHeight: 1.7 }}>{study.description}</p>
-                    </div>
-                    <div style={{ display: "flex", alignItems: "center", gap: 16, marginTop: 24 }}>
-                      <span style={{ fontSize: "0.8rem", color: "rgba(17,17,17,0.4)" }}>⏱ {study.duration} campaign</span>
-                      <Link href={`/case-studies/${study.id}`} className="btn-primary" style={{ padding: "10px 20px", fontSize: "0.8rem" }}>Full Case Study <ArrowRight size={14} /></Link>
-                    </div>
-                  </div>
-                  <div style={{ padding: "48px 40px", display: "flex", flexDirection: "column", justifyContent: "center", gap: 20, order: i % 2 === 0 ? 1 : 0 }}>
-                    <div style={{ fontSize: "0.7rem", fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase" as const, color: "rgba(17,17,17,0.35)" }}>Campaign Results</div>
-                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
-                      {[
-                        { icon: DollarSign, label: "Revenue", value: study.results.revenue, color: "#22c55e" },
-                        { icon: Users, label: "Followers", value: study.results.followers, color: "#3b82f6" },
-                        { icon: TrendingUp, label: "Engagement", value: study.results.engagement, color: "#f59e0b" },
-                        { icon: Zap, label: "ROAS", value: study.results.roas, color: "#dc2626" },
-                      ].map(m => (
-                        <div key={m.label} style={{ padding: 16, background: "rgba(17,17,17,0.03)", border: "1px solid rgba(17,17,17,0.06)", borderRadius: 12 }}>
-                          <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 4 }}>
-                            <m.icon size={12} color={m.color} />
-                            <span style={{ fontSize: "0.65rem", color: "rgba(17,17,17,0.4)", textTransform: "uppercase" as const, letterSpacing: "0.06em" }}>{m.label}</span>
-                          </div>
-                          <div style={{ fontFamily: "var(--font-display)", fontSize: "1.5rem", fontWeight: 800, color: m.color, lineHeight: 1 }}>{m.value}</div>
-                        </div>
-                      ))}
-                    </div>
-                    {[{ label: "ROI Achievement", value: 92 }, { label: "Creator Satisfaction", value: 98 }, { label: "Campaign Completion", value: 100 }].map(bar => (
-                      <div key={bar.label}>
-                        <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 5 }}>
-                          <span style={{ fontSize: "0.75rem", color: "rgba(17,17,17,0.5)" }}>{bar.label}</span>
-                          <span style={{ fontSize: "0.75rem", color: "#111111", fontWeight: 600 }}>{bar.value}%</span>
-                        </div>
-                        <div style={{ height: 4, background: "rgba(17,17,17,0.06)", borderRadius: 2 }}>
-                          <div style={{ height: "100%", width: `${bar.value}%`, background: "linear-gradient(90deg,#dc2626,#f87171)", borderRadius: 2 }} />
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
+        <section style={{ padding: "0 0 0" }}>
+          <div className="w-full">
+            <ClientCaseStudies caseStudies={CASE_STUDIES} />
 
             <div style={{ marginTop: 60, textAlign: "center", padding: "48px", background: "rgba(220,38,38,0.06)", border: "1px solid rgba(220,38,38,0.18)", borderRadius: 24 }}>
               <h3 style={{ fontFamily: "var(--font-display)", fontSize: "1.8rem", fontWeight: 800, marginBottom: 12 }}>Ready to be our next success story?</h3>

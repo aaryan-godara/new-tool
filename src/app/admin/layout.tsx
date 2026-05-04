@@ -1,12 +1,13 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
   LayoutDashboard, Users, Star, BarChart3, FileText, Settings,
   Megaphone, MessageSquare, Globe, ShoppingBag, LogOut, Zap,
-  ChevronRight, Bell, Search, Menu, X
+  ChevronRight, Bell, Search, Menu, X, Lock
 } from "lucide-react";
+import { getAuth, login, logout, onAuthUpdate } from "@/lib/auth-store";
 
 const NAV_GROUPS = [
   {
@@ -45,7 +46,95 @@ const NAV_GROUPS = [
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
+  
+  // Auth state
+  const [isAuth, setIsAuth] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
+  useEffect(() => {
+    setMounted(true);
+    setIsAuth(getAuth().isLoggedIn);
+    const cleanup = onAuthUpdate(() => {
+      setIsAuth(getAuth().isLoggedIn);
+    });
+    return cleanup;
+  }, []);
+
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+    const result = login(email, password);
+    if (!result.success) {
+      setError(result.error || "Login failed");
+    }
+  };
+
+  const handleLogout = () => {
+    logout();
+    router.push("/");
+  };
+
+  if (!mounted) return null;
+
+  // Render Login Screen if not authenticated
+  if (!isAuth) {
+    return (
+      <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#f8f9fa", padding: 20 }}>
+        <div style={{ width: "100%", maxWidth: 420, background: "#fff", padding: 40, borderRadius: 24, boxShadow: "0 20px 40px rgba(0,0,0,0.08)", border: "1px solid rgba(17,17,17,0.05)" }}>
+          <div style={{ display: "flex", justifyContent: "center", marginBottom: 24 }}>
+            <div style={{ width: 48, height: 48, borderRadius: 12, background: "linear-gradient(135deg, #dc2626, #7f1d1d)", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 0 20px rgba(220,38,38,0.3)" }}>
+              <Lock size={24} color="#fff" />
+            </div>
+          </div>
+          <h1 style={{ fontFamily: "var(--font-display)", fontSize: "1.5rem", fontWeight: 800, textAlign: "center", marginBottom: 8 }}>Admin Access</h1>
+          <p style={{ textAlign: "center", color: "rgba(17,17,17,0.5)", fontSize: "0.875rem", marginBottom: 32 }}>Please sign in to access the dashboard.</p>
+          
+          <form onSubmit={handleLogin} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+            {error && (
+              <div style={{ padding: 12, background: "rgba(220,38,38,0.1)", color: "#dc2626", borderRadius: 8, fontSize: "0.85rem", fontWeight: 600, textAlign: "center" }}>
+                {error}
+              </div>
+            )}
+            <div>
+              <label style={{ display: "block", fontSize: "0.8rem", fontWeight: 600, color: "rgba(17,17,17,0.7)", marginBottom: 8 }}>Email Address</label>
+              <input 
+                type="email" 
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="admin@tcc.com"
+                style={{ width: "100%", padding: "12px 16px", borderRadius: 10, border: "1px solid rgba(17,17,17,0.1)", background: "rgba(17,17,17,0.02)", fontSize: "0.9rem", outline: "none" }}
+                required
+              />
+            </div>
+            <div>
+              <label style={{ display: "block", fontSize: "0.8rem", fontWeight: 600, color: "rgba(17,17,17,0.7)", marginBottom: 8 }}>Password</label>
+              <input 
+                type="password" 
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••"
+                style={{ width: "100%", padding: "12px 16px", borderRadius: 10, border: "1px solid rgba(17,17,17,0.1)", background: "rgba(17,17,17,0.02)", fontSize: "0.9rem", outline: "none" }}
+                required
+              />
+            </div>
+            <button type="submit" style={{ width: "100%", padding: "14px", background: "#dc2626", color: "#fff", borderRadius: 10, border: "none", fontWeight: 600, fontSize: "0.95rem", cursor: "pointer", marginTop: 8, boxShadow: "0 4px 12px rgba(220,38,38,0.2)" }}>
+              Sign In
+            </button>
+          </form>
+          
+          <div style={{ marginTop: 24, textAlign: "center" }}>
+            <Link href="/" style={{ color: "rgba(17,17,17,0.4)", fontSize: "0.8rem", textDecoration: "none" }}>← Back to Website</Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Render Dashboard
   return (
     <div style={{ display: "flex", minHeight: "100vh", background: "var(--black-rich)" }}>
       {/* Sidebar */}
@@ -142,10 +231,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               <div style={{ fontSize: "0.65rem", color: "rgba(17,17,17,0.35)" }}>hello@thecreatorconnect.com</div>
             </div>
           </div>
-          <Link href="/" className="sidebar-link">
+          <button onClick={handleLogout} className="sidebar-link" style={{ width: "100%", border: "none", background: "none", cursor: "pointer", textAlign: "left" }}>
             <LogOut size={14} />
-            Back to Website
-          </Link>
+            Sign Out
+          </button>
         </div>
       </aside>
 
@@ -215,7 +304,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               width: 36, height: 36, borderRadius: "50%",
               background: "linear-gradient(135deg, #dc2626, #7f1d1d)",
               display: "flex", alignItems: "center", justifyContent: "center",
-              fontSize: "0.875rem", fontWeight: 700, cursor: "pointer",
+              fontSize: "0.875rem", fontWeight: 700, cursor: "pointer", color: "#fff"
             }}>A</div>
           </div>
         </header>

@@ -33,16 +33,24 @@ const creatorPerformance = [
 ];
 
 const LIVE_METRICS = [
-  { label: "Total Revenue", value: "₹2.4Cr", change: "+32%", positive: true },
-  { label: "Active Campaigns", value: "24", change: "+8", positive: true },
-  { label: "Creator Reach", value: "12.8M", change: "+18%", positive: true },
-  { label: "Avg. ROAS", value: "7.8x", change: "+1.2x", positive: true },
+  { label: "Total Revenue", value: "₹1.2Cr", change: "+15%", positive: true },
+  { label: "Active Campaigns", value: "22", change: "+4", positive: true },
+  { label: "Creator Reach", value: "5.5M", change: "+12%", positive: true },
+  { label: "Avg. ROAS", value: "4.5x", change: "+0.8x", positive: true },
 ];
 
 export default function AnalyticsSection() {
   return (
-    <section className="section" id="analytics" style={{ background: "rgba(17,17,17,0.01)" }}>
-      <div className="container">
+    <>
+      <style>{`
+        @media (max-width: 1024px) {
+          .analytics-section-wrapper {
+            display: none !important;
+          }
+        }
+      `}</style>
+      <section className="section analytics-section-wrapper" id="analytics" style={{ background: "rgba(17,17,17,0.01)" }}>
+        <div className="container">
         <div style={{ textAlign: "center", marginBottom: 64 }}>
           <div className="section-badge" style={{ margin: "0 auto 20px" }}>Live Analytics</div>
           <h2 className="section-title">
@@ -258,5 +266,6 @@ export default function AnalyticsSection() {
         </div>
       </div>
     </section>
+    </>
   );
 }

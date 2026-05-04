@@ -1,32 +1,36 @@
 "use client";
 import { useState } from "react";
 import { Plus, Search, Edit, Trash2, Eye, Filter, ChevronDown } from "lucide-react";
-
-const CLIENTS = [
-  { id: 1, name: "LuxeBeauty", contact: "Priya Sharma", email: "priya@luxebeauty.com", plan: "Growth", revenue: "₹1.5L/mo", campaigns: 4, status: "Active", joined: "Jan 2024" },
-  { id: 2, name: "FitCore India", contact: "Arjun Mehta", email: "arjun@fitcore.in", plan: "Enterprise", revenue: "₹3.2L/mo", campaigns: 8, status: "Active", joined: "Nov 2023" },
-  { id: 3, name: "StyleVault", contact: "Kavya Reddy", email: "kavya@stylevault.com", plan: "Growth", revenue: "₹1.2L/mo", campaigns: 3, status: "Active", joined: "Feb 2024" },
-  { id: 4, name: "TechGadgetHub", contact: "Rohit Gupta", email: "rohit@techgadgethub.com", plan: "Starter", revenue: "₹55K/mo", campaigns: 2, status: "Active", joined: "Mar 2024" },
-  { id: 5, name: "WellnessFirst", contact: "Sneha Patel", email: "sneha@wellnessfirst.com", plan: "Growth", revenue: "₹1L/mo", campaigns: 3, status: "Onboarding", joined: "Apr 2024" },
-];
+import { useClients } from "@/lib/use-dashboard";
 
 const PLAN_COLOR: Record<string, string> = { Starter: "#3b82f6", Growth: "#f59e0b", Enterprise: "#dc2626" };
 
 export default function AdminClients() {
+  const { clients, addClient, deleteClient } = useClients();
   const [search, setSearch] = useState("");
   const [showModal, setShowModal] = useState(false);
+  const [form, setForm] = useState({ name: "", contact: "", email: "", phone: "", plan: "Growth" as "Starter" | "Growth" | "Enterprise", revenue: "", campaigns: 0, status: "Onboarding" as "Active" | "Onboarding" | "Paused", joined: new Date().toLocaleDateString("en-US", { month: "short", year: "numeric" }) });
 
-  const filtered = CLIENTS.filter(c =>
+  const filtered = clients.filter(c =>
     c.name.toLowerCase().includes(search.toLowerCase()) ||
     c.contact.toLowerCase().includes(search.toLowerCase())
   );
+
+  const handleAdd = () => {
+    if (!form.name || !form.contact) return;
+    addClient(form);
+    setForm({ name: "", contact: "", email: "", phone: "", plan: "Growth", revenue: "", campaigns: 0, status: "Onboarding", joined: new Date().toLocaleDateString("en-US", { month: "short", year: "numeric" }) });
+    setShowModal(false);
+  };
+
+  const activeCount = clients.filter(c => c.status === "Active").length;
 
   return (
     <div>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 28 }}>
         <div>
           <h1 style={{ fontFamily: "var(--font-display)", fontSize: "1.6rem", fontWeight: 800, marginBottom: 4 }}>Client Management</h1>
-          <p style={{ color: "rgba(17,17,17,0.4)", fontSize: "0.875rem" }}>{CLIENTS.length} active clients</p>
+          <p style={{ color: "rgba(17,17,17,0.4)", fontSize: "0.875rem" }}>{activeCount} active clients · {clients.length} total</p>
         </div>
         <button onClick={() => setShowModal(true)} className="btn-primary">
           <Plus size={16} /> Add Client
@@ -36,10 +40,10 @@ export default function AdminClients() {
       {/* Stats */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 16, marginBottom: 24 }}>
         {[
-          { label: "Total Clients", value: "47", sub: "+8 this month" },
-          { label: "MRR", value: "₹28.4L", sub: "+22% growth" },
-          { label: "Avg. Plan Value", value: "₹1.2L", sub: "per month" },
-          { label: "Retention Rate", value: "98%", sub: "industry leading" },
+          { label: "Total Clients", value: String(clients.length), sub: `${activeCount} active` },
+          { label: "Active", value: String(activeCount), sub: "currently running" },
+          { label: "Onboarding", value: String(clients.filter(c => c.status === "Onboarding").length), sub: "in pipeline" },
+          { label: "Total Campaigns", value: String(clients.reduce((s, c) => s + c.campaigns, 0)), sub: "across all clients" },
         ].map(s => (
           <div key={s.label} className="stat-card">
             <div style={{ fontFamily: "var(--font-display)", fontSize: "1.6rem", fontWeight: 800, color: "#111111", marginBottom: 4 }}>{s.value}</div>
@@ -64,9 +68,6 @@ export default function AdminClients() {
             style={{ background: "none", border: "none", outline: "none", color: "#111111", fontSize: "0.875rem", flex: 1 }}
           />
         </div>
-        <button className="btn-secondary" style={{ padding: "10px 16px", gap: 6 }}>
-          <Filter size={14} /> Filter <ChevronDown size={12} />
-        </button>
       </div>
 
       {/* Table */}
@@ -85,7 +86,9 @@ export default function AdminClients() {
             </tr>
           </thead>
           <tbody>
-            {filtered.map(c => (
+            {filtered.length === 0 ? (
+              <tr><td colSpan={8} style={{ textAlign: "center", padding: 40, color: "rgba(17,17,17,0.3)" }}>No clients found</td></tr>
+            ) : filtered.map(c => (
               <tr key={c.id}>
                 <td style={{ paddingLeft: 24 }}>
                   <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
@@ -111,22 +114,20 @@ export default function AdminClients() {
                     border: `1px solid ${PLAN_COLOR[c.plan]}25`,
                   }}>{c.plan}</span>
                 </td>
-                <td style={{ color: "#4ade80", fontWeight: 600 }}>{c.revenue}</td>
+                <td style={{ color: "#4ade80", fontWeight: 600 }}>{c.revenue || "—"}</td>
                 <td>{c.campaigns}</td>
                 <td>
                   <span style={{
                     padding: "3px 10px", borderRadius: 100, fontSize: "0.7rem", fontWeight: 700,
-                    color: c.status === "Active" ? "#4ade80" : "#f59e0b",
-                    background: c.status === "Active" ? "rgba(34,197,94,0.1)" : "rgba(245,158,11,0.1)",
-                    border: `1px solid ${c.status === "Active" ? "rgba(34,197,94,0.2)" : "rgba(245,158,11,0.2)"}`,
+                    color: c.status === "Active" ? "#4ade80" : c.status === "Paused" ? "#f87171" : "#f59e0b",
+                    background: c.status === "Active" ? "rgba(34,197,94,0.1)" : c.status === "Paused" ? "rgba(220,38,38,0.1)" : "rgba(245,158,11,0.1)",
+                    border: `1px solid ${c.status === "Active" ? "rgba(34,197,94,0.2)" : c.status === "Paused" ? "rgba(220,38,38,0.2)" : "rgba(245,158,11,0.2)"}`,
                   }}>{c.status}</span>
                 </td>
                 <td style={{ fontSize: "0.8rem" }}>{c.joined}</td>
                 <td style={{ paddingRight: 24 }}>
                   <div style={{ display: "flex", gap: 6 }}>
-                    <button style={{ padding: 6, borderRadius: 6, background: "rgba(17,17,17,0.05)", border: "none", cursor: "pointer", color: "rgba(17,17,17,0.5)" }}><Eye size={13} /></button>
-                    <button style={{ padding: 6, borderRadius: 6, background: "rgba(17,17,17,0.05)", border: "none", cursor: "pointer", color: "rgba(17,17,17,0.5)" }}><Edit size={13} /></button>
-                    <button style={{ padding: 6, borderRadius: 6, background: "rgba(220,38,38,0.1)", border: "none", cursor: "pointer", color: "#f87171" }}><Trash2 size={13} /></button>
+                    <button onClick={() => deleteClient(c.id)} style={{ padding: 6, borderRadius: 6, background: "rgba(220,38,38,0.1)", border: "none", cursor: "pointer", color: "#f87171" }}><Trash2 size={13} /></button>
                   </div>
                 </td>
               </tr>
@@ -135,38 +136,42 @@ export default function AdminClients() {
         </table>
       </div>
 
+      {/* Add Client Modal */}
       {showModal && (
         <div style={{
           position: "fixed", inset: 0, zIndex: 1000,
-          background: "rgba(0,0,0,0.7)", backdropFilter: "blur(8px)",
+          background: "rgba(0,0,0,0.5)", backdropFilter: "blur(8px)",
           display: "flex", alignItems: "center", justifyContent: "center", padding: 24,
         }}>
           <div style={{
-            background: "var(--charcoal)", border: "1px solid var(--charcoal-border)",
+            background: "#fff", border: "1px solid rgba(17,17,17,0.1)",
             borderRadius: 20, padding: 32, width: "100%", maxWidth: 520,
           }}>
             <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 24 }}>
               <h2 style={{ fontFamily: "var(--font-display)", fontSize: "1.2rem", fontWeight: 700 }}>Add New Client</h2>
-              <button onClick={() => setShowModal(false)} style={{ background: "none", border: "none", cursor: "pointer", color: "rgba(17,17,17,0.5)" }}>✕</button>
+              <button onClick={() => setShowModal(false)} style={{ background: "none", border: "none", cursor: "pointer", color: "rgba(17,17,17,0.5)", fontSize: "1.2rem" }}>✕</button>
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
-                <div><label className="label">Brand Name</label><input className="input-field" placeholder="Brand name" /></div>
-                <div><label className="label">Contact Person</label><input className="input-field" placeholder="Full name" /></div>
+                <div><label className="label">Brand Name *</label><input className="input-field" placeholder="Brand name" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} /></div>
+                <div><label className="label">Contact Person *</label><input className="input-field" placeholder="Full name" value={form.contact} onChange={e => setForm({ ...form, contact: e.target.value })} /></div>
               </div>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
-                <div><label className="label">Email</label><input className="input-field" type="email" placeholder="email@brand.com" /></div>
-                <div><label className="label">Phone</label><input className="input-field" placeholder="+91..." /></div>
+                <div><label className="label">Email</label><input className="input-field" type="email" placeholder="email@brand.com" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} /></div>
+                <div><label className="label">Phone</label><input className="input-field" placeholder="+91..." value={form.phone} onChange={e => setForm({ ...form, phone: e.target.value })} /></div>
               </div>
-              <div>
-                <label className="label">Plan</label>
-                <select className="input-field">
-                  <option>Starter</option><option>Growth</option><option>Enterprise</option>
-                </select>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+                <div>
+                  <label className="label">Plan</label>
+                  <select className="input-field" value={form.plan} onChange={e => setForm({ ...form, plan: e.target.value as "Starter" | "Growth" | "Enterprise" })}>
+                    <option>Starter</option><option>Growth</option><option>Enterprise</option>
+                  </select>
+                </div>
+                <div><label className="label">Revenue</label><input className="input-field" placeholder="₹1L/mo" value={form.revenue} onChange={e => setForm({ ...form, revenue: e.target.value })} /></div>
               </div>
               <div style={{ display: "flex", gap: 10, marginTop: 4 }}>
                 <button onClick={() => setShowModal(false)} className="btn-secondary" style={{ flex: 1, justifyContent: "center" }}>Cancel</button>
-                <button className="btn-primary" style={{ flex: 1, justifyContent: "center" }} onClick={() => setShowModal(false)}>Add Client</button>
+                <button className="btn-primary" style={{ flex: 1, justifyContent: "center" }} onClick={handleAdd}>Add Client</button>
               </div>
             </div>
           </div>

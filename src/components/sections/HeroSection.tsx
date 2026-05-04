@@ -77,9 +77,34 @@ export default function HeroSection() {
         backgroundSize: "60px 60px",
       }} />
 
+      <style>{`
+        .hero-floating-card { display: block; }
+        @media (max-width: 1024px) {
+          .hero-floating-card { display: none !important; }
+        }
+        
+        .stat-item {
+          padding: 0 40px;
+          border-right: 1px solid rgba(17,17,17,0.1);
+        }
+        .stat-item:last-child {
+          border-right: none;
+        }
+        @media (max-width: 768px) {
+          .stat-item {
+            padding: 24px 20px;
+            width: 50%;
+          }
+          .stat-item:nth-child(even) { border-right: none; }
+          .stat-item:nth-child(1), .stat-item:nth-child(2) {
+            border-bottom: 1px solid rgba(17,17,17,0.1);
+          }
+        }
+      `}</style>
+
       {/* Floating Cards */}
       {FLOATING_CARDS.map((card, i) => (
-        <div key={card.label} className="animate-float" style={{
+        <div key={card.label} className="animate-float hero-floating-card" style={{
           position: "absolute",
           zIndex: 3,
           animationDelay: `${i * 1.2}s`,
@@ -183,16 +208,11 @@ export default function HeroSection() {
         <div style={{
           display: "flex",
           justifyContent: "center",
-          gap: "0",
           flexWrap: "wrap",
           animation: "slide-in-up 1s 0.6s cubic-bezier(0.19,1,0.22,1) both",
         }}>
           {STATS.map((stat, i) => (
-            <div key={stat.label} style={{
-              padding: "0 40px",
-              textAlign: "center",
-              borderRight: i < STATS.length - 1 ? "1px solid rgba(17,17,17,0.1)" : "none",
-            }}>
+            <div key={stat.label} className="stat-item" style={{ textAlign: "center" }}>
               <div style={{
                 fontFamily: "var(--font-display)",
                 fontSize: "clamp(1.8rem, 3vw, 2.5rem)",

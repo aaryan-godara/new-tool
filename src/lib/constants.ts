@@ -258,6 +258,11 @@ export const CASE_STUDIES = [
     },
     description:
       "Comprehensive creator campaign combining nano-influencers, UGC production, and paid amplification.",
+    progressStats: [
+      { label: "ROI Target Hit", value: 92 },
+      { label: "Creator Satisfaction", value: 98 },
+      { label: "Campaign Completion", value: 100 },
+    ],
   },
   {
     id: "fitcore-2024",
@@ -275,10 +280,15 @@ export const CASE_STUDIES = [
     },
     description:
       "Long-form creator partnership strategy with authentic fitness content and performance tracking.",
+    progressStats: [
+      { label: "Influencer Retention", value: 85 },
+      { label: "Audience Match", value: 94 },
+      { label: "Content Approvals", value: 100 },
+    ],
   },
   {
     id: "techgadgethub-2024",
-    brand: "TechGadgetHub",
+    brand: "GadgetHub",
     category: "Technology",
     duration: "1 month",
     image: "/case-studies/techgadget.jpg",
@@ -292,6 +302,11 @@ export const CASE_STUDIES = [
     },
     description:
       "High-intensity product launch with tier-1 tech creators and coordinated content drops.",
+    progressStats: [
+      { label: "Viral Reach Target", value: 120 },
+      { label: "Stock Depletion", value: 100 },
+      { label: "Post-Launch Engagement", value: 88 },
+    ],
   },
 ];
 

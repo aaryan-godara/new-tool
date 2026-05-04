@@ -1,7 +1,7 @@
 import Navbar from "@/components/ui/Navbar";
 import Footer from "@/components/ui/Footer";
-import { CREATORS } from "@/lib/constants";
-import { ArrowRight, CheckCircle, Camera, Video } from "lucide-react";
+import CreatorGridClient from "@/components/ui/CreatorGridClient";
+import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import type { Metadata } from "next";
 
@@ -38,57 +38,7 @@ export default function CreatorsPage() {
 
         <section style={{ padding: "40px 0 120px" }}>
           <div className="container">
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 20 }}>
-              {CREATORS.map(creator => (
-                <div key={creator.id} className="creator-card">
-                  <div style={{
-                    height: 120,
-                    background: `linear-gradient(135deg, ${CATEGORY_COLORS[creator.category] || "#dc2626"}25, rgba(0,0,0,0.5))`,
-                    display: "flex", alignItems: "flex-end", padding: 16, position: "relative",
-                  }}>
-                    <span style={{
-                      position: "absolute", top: 12, right: 12, padding: "3px 10px", borderRadius: 100,
-                      fontSize: "0.65rem", fontWeight: 700, textTransform: "uppercase" as const, letterSpacing: "0.08em",
-                      color: CATEGORY_COLORS[creator.category] || "#f87171",
-                      background: `${CATEGORY_COLORS[creator.category] || "#dc2626"}20`,
-                      border: `1px solid ${CATEGORY_COLORS[creator.category] || "#dc2626"}30`,
-                    }}>{creator.category}</span>
-                    <div style={{
-                      width: 56, height: 56, borderRadius: "50%",
-                      background: `linear-gradient(135deg, ${CATEGORY_COLORS[creator.category] || "#dc2626"}, #fff)`,
-                      border: "2px solid rgba(17,17,17,0.15)",
-                      display: "flex", alignItems: "center", justifyContent: "center",
-                      fontSize: "1.4rem", fontWeight: 700,
-                    }}>{creator.name.charAt(0)}</div>
-                  </div>
-                  <div style={{ padding: 20 }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 4 }}>
-                      <span style={{ fontFamily: "var(--font-display)", fontSize: "1rem", fontWeight: 700, color: "#111111" }}>{creator.name}</span>
-                      {creator.verified && <CheckCircle size={14} color="#3b82f6" fill="#3b82f6" />}
-                    </div>
-                    <div style={{ fontSize: "0.75rem", color: "rgba(17,17,17,0.4)", marginBottom: 14 }}>📍 {creator.location}</div>
-                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 14, padding: 12, background: "rgba(17,17,17,0.03)", borderRadius: 10, border: "1px solid rgba(17,17,17,0.06)" }}>
-                      <div>
-                        <div style={{ fontFamily: "var(--font-display)", fontSize: "1.1rem", fontWeight: 700, color: "#111111" }}>{creator.followers}</div>
-                        <div style={{ fontSize: "0.6rem", color: "rgba(17,17,17,0.4)", textTransform: "uppercase" as const, letterSpacing: "0.06em" }}>Followers</div>
-                      </div>
-                      <div>
-                        <div style={{ fontFamily: "var(--font-display)", fontSize: "1.1rem", fontWeight: 700, color: "#22c55e" }}>{creator.engagement}</div>
-                        <div style={{ fontSize: "0.6rem", color: "rgba(17,17,17,0.4)", textTransform: "uppercase" as const, letterSpacing: "0.06em" }}>Engagement</div>
-                      </div>
-                    </div>
-                    <div style={{ display: "flex", gap: 6 }}>
-                      {creator.platforms.map(p => (
-                        <div key={p} style={{ display: "flex", alignItems: "center", gap: 4, padding: "4px 10px", borderRadius: 100, background: "rgba(17,17,17,0.05)", border: "1px solid rgba(17,17,17,0.08)" }}>
-                          {p === "Instagram" ? <Camera size={11} color="#e1306c" /> : <Video size={11} color="#ff0000" />}
-                          <span style={{ fontSize: "0.7rem", color: "rgba(17,17,17,0.5)" }}>{p}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
+            <CreatorGridClient />
           </div>
         </section>
       </main>

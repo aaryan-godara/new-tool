@@ -1,37 +1,62 @@
 "use client";
 import { useState } from "react";
-import { Plus, Search, Edit, Trash2, Eye, ChevronDown, Filter } from "lucide-react";
-import Link from "next/link";
-
-const CREATORS = [
-  { id: 1, name: "Aisha Kapoor", category: "Lifestyle", followers: "1.2M", engagement: "8.4%", campaigns: 12, earnings: "₹4.8L", status: "Active", verified: true },
-  { id: 2, name: "Rahul Verma", category: "Fitness", followers: "890K", engagement: "11.2%", campaigns: 8, earnings: "₹3.2L", status: "Active", verified: true },
-  { id: 3, name: "Prachi Singh", category: "Fashion", followers: "2.1M", engagement: "6.8%", campaigns: 18, earnings: "₹7.4L", status: "Active", verified: true },
-  { id: 4, name: "Dev Malhotra", category: "Technology", followers: "650K", engagement: "9.3%", campaigns: 6, earnings: "₹2.1L", status: "Active", verified: true },
-  { id: 5, name: "Meera Nair", category: "Finance", followers: "480K", engagement: "12.1%", campaigns: 4, earnings: "₹1.8L", status: "Active", verified: true },
-  { id: 6, name: "Karan Khanna", category: "Food", followers: "1.5M", engagement: "7.6%", campaigns: 14, earnings: "₹5.6L", status: "Paused", verified: false },
-];
+import { Plus, Search, Trash2, Filter, ChevronDown, CheckCircle } from "lucide-react";
+import { useCreators } from "@/lib/use-dashboard";
 
 export default function AdminCreators() {
+  const { creators, addCreator, deleteCreator } = useCreators();
   const [search, setSearch] = useState("");
   const [showModal, setShowModal] = useState(false);
-  const [form, setForm] = useState({ name: "", category: "", instagram: "", youtube: "", followers: "", engagement: "" });
+  const [form, setForm] = useState({ 
+    name: "", handle: "", platform: "Instagram", followers: "", 
+    category: "Lifestyle", rate: "", engagement: "", 
+    status: "Pending" as "Active" | "Inactive" | "Pending", 
+    rating: 4, campaigns: 0,
+    location: "", avatar: "", verified: false, platforms: ["Instagram"]
+  });
 
-  const filtered = CREATORS.filter(c =>
+  const filtered = creators.filter(c =>
     c.name.toLowerCase().includes(search.toLowerCase()) ||
     c.category.toLowerCase().includes(search.toLowerCase())
   );
+
+  const handleAdd = () => {
+    if (!form.name || !form.handle) return;
+    addCreator(form);
+    setForm({ 
+      name: "", handle: "", platform: "Instagram", followers: "", 
+      category: "Lifestyle", rate: "", engagement: "", 
+      status: "Pending", rating: 4, campaigns: 0,
+      location: "", avatar: "", verified: false, platforms: ["Instagram"]
+    });
+    setShowModal(false);
+  };
 
   return (
     <div>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 28 }}>
         <div>
           <h1 style={{ fontFamily: "var(--font-display)", fontSize: "1.6rem", fontWeight: 800, marginBottom: 4 }}>Creator Management</h1>
-          <p style={{ color: "rgba(17,17,17,0.4)", fontSize: "0.875rem" }}>{CREATORS.length} creators in your network</p>
+          <p style={{ color: "rgba(17,17,17,0.4)", fontSize: "0.875rem" }}>{creators.length} creators in your network</p>
         </div>
         <button onClick={() => setShowModal(true)} className="btn-primary">
           <Plus size={16} /> Add Creator
         </button>
+      </div>
+
+      {/* Stats */}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 16, marginBottom: 24 }}>
+        {[
+          { label: "Total Creators", value: String(creators.length), color: "#3b82f6" },
+          { label: "Active", value: String(creators.filter(c => c.status === "Active").length), color: "#22c55e" },
+          { label: "Pending", value: String(creators.filter(c => c.status === "Pending").length), color: "#f59e0b" },
+          { label: "Total Campaigns", value: String(creators.reduce((s, c) => s + c.campaigns, 0)), color: "#dc2626" },
+        ].map(s => (
+          <div key={s.label} className="stat-card">
+            <div style={{ fontFamily: "var(--font-display)", fontSize: "1.5rem", fontWeight: 800, color: s.color, marginBottom: 2 }}>{s.value}</div>
+            <div style={{ fontSize: "0.75rem", color: "rgba(17,17,17,0.4)" }}>{s.label}</div>
+          </div>
+        ))}
       </div>
 
       {/* Search & Filter */}
@@ -49,9 +74,6 @@ export default function AdminCreators() {
             style={{ background: "none", border: "none", outline: "none", color: "#111111", fontSize: "0.875rem", flex: 1 }}
           />
         </div>
-        <button className="btn-secondary" style={{ padding: "10px 16px", gap: 6 }}>
-          <Filter size={14} /> Filter <ChevronDown size={12} />
-        </button>
       </div>
 
       {/* Table */}
@@ -60,51 +82,56 @@ export default function AdminCreators() {
           <thead>
             <tr>
               <th style={{ paddingLeft: 24 }}>Creator</th>
+              <th>Platform</th>
               <th>Category</th>
               <th>Followers</th>
               <th>Engagement</th>
-              <th>Campaigns</th>
-              <th>Earnings</th>
+              <th>Rate</th>
               <th>Status</th>
               <th style={{ paddingRight: 24 }}>Actions</th>
             </tr>
           </thead>
           <tbody>
-            {filtered.map(c => (
+            {filtered.length === 0 ? (
+              <tr><td colSpan={8} style={{ textAlign: "center", padding: 40, color: "rgba(17,17,17,0.3)" }}>No creators found</td></tr>
+            ) : filtered.map(c => (
               <tr key={c.id}>
                 <td style={{ paddingLeft: 24 }}>
                   <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                    <div style={{
-                      width: 34, height: 34, borderRadius: "50%",
-                      background: "linear-gradient(135deg, #dc2626, #7f1d1d)",
-                      display: "flex", alignItems: "center", justifyContent: "center",
-                      fontSize: "0.875rem", fontWeight: 700, flexShrink: 0,
-                    }}>{c.name.charAt(0)}</div>
+                    {c.avatar ? (
+                      <img src={c.avatar} alt={c.name} style={{ width: 34, height: 34, borderRadius: "50%", objectFit: "cover" }} />
+                    ) : (
+                      <div style={{
+                        width: 34, height: 34, borderRadius: "50%",
+                        background: "linear-gradient(135deg, #dc2626, #7f1d1d)",
+                        display: "flex", alignItems: "center", justifyContent: "center",
+                        fontSize: "0.875rem", fontWeight: 700, flexShrink: 0, color: "#fff",
+                      }}>{c.name.charAt(0)}</div>
+                    )}
                     <div>
-                      <div style={{ fontSize: "0.875rem", fontWeight: 600, color: "#111111" }}>{c.name}</div>
-                      {c.verified && <div style={{ fontSize: "0.65rem", color: "#3b82f6" }}>✓ Verified</div>}
+                      <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
+                        <div style={{ fontSize: "0.875rem", fontWeight: 600, color: "#111111" }}>{c.name}</div>
+                        {c.verified && <CheckCircle size={12} color="#3b82f6" fill="#3b82f6" />}
+                      </div>
+                      <div style={{ fontSize: "0.7rem", color: "rgba(17,17,17,0.4)" }}>{c.handle}</div>
                     </div>
                   </div>
                 </td>
+                <td style={{ fontSize: "0.8rem" }}>{c.platform}</td>
                 <td><span className="badge badge-red">{c.category}</span></td>
                 <td style={{ color: "#111111", fontWeight: 600 }}>{c.followers}</td>
                 <td style={{ color: "#22c55e", fontWeight: 600 }}>{c.engagement}</td>
-                <td>{c.campaigns}</td>
-                <td style={{ color: "#f59e0b", fontWeight: 600 }}>{c.earnings}</td>
+                <td style={{ color: "#f59e0b", fontWeight: 600 }}>{c.rate}</td>
                 <td>
                   <span style={{
                     padding: "3px 10px", borderRadius: 100, fontSize: "0.7rem", fontWeight: 700,
-                    color: c.status === "Active" ? "#4ade80" : "#f59e0b",
-                    background: c.status === "Active" ? "rgba(34,197,94,0.1)" : "rgba(245,158,11,0.1)",
-                    border: `1px solid ${c.status === "Active" ? "rgba(34,197,94,0.2)" : "rgba(245,158,11,0.2)"}`,
+                    color: c.status === "Active" ? "#4ade80" : c.status === "Pending" ? "#f59e0b" : "#f87171",
+                    background: c.status === "Active" ? "rgba(34,197,94,0.1)" : c.status === "Pending" ? "rgba(245,158,11,0.1)" : "rgba(220,38,38,0.1)",
+                    border: `1px solid ${c.status === "Active" ? "rgba(34,197,94,0.2)" : c.status === "Pending" ? "rgba(245,158,11,0.2)" : "rgba(220,38,38,0.2)"}`,
                   }}>{c.status}</span>
                 </td>
                 <td style={{ paddingRight: 24 }}>
-                  <div style={{ display: "flex", gap: 6 }}>
-                    <button style={{ padding: 6, borderRadius: 6, background: "rgba(17,17,17,0.05)", border: "none", cursor: "pointer", color: "rgba(17,17,17,0.5)" }}><Eye size={13} /></button>
-                    <button style={{ padding: 6, borderRadius: 6, background: "rgba(17,17,17,0.05)", border: "none", cursor: "pointer", color: "rgba(17,17,17,0.5)" }}><Edit size={13} /></button>
-                    <button style={{ padding: 6, borderRadius: 6, background: "rgba(220,38,38,0.1)", border: "none", cursor: "pointer", color: "#f87171" }}><Trash2 size={13} /></button>
-                  </div>
+                  <button onClick={() => deleteCreator(c.id)} style={{ padding: 6, borderRadius: 6, background: "rgba(220,38,38,0.1)", border: "none", cursor: "pointer", color: "#f87171" }}><Trash2 size={13} /></button>
                 </td>
               </tr>
             ))}
@@ -116,58 +143,57 @@ export default function AdminCreators() {
       {showModal && (
         <div style={{
           position: "fixed", inset: 0, zIndex: 1000,
-          background: "rgba(0,0,0,0.7)", backdropFilter: "blur(8px)",
+          background: "rgba(0,0,0,0.5)", backdropFilter: "blur(8px)",
           display: "flex", alignItems: "center", justifyContent: "center",
           padding: 24,
         }}>
           <div style={{
-            background: "var(--charcoal)",
-            border: "1px solid var(--charcoal-border)",
+            background: "#fff",
+            border: "1px solid rgba(17,17,17,0.1)",
             borderRadius: 20,
             padding: 32,
             width: "100%",
             maxWidth: 520,
-            animation: "scale-in 0.3s ease forwards",
           }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
               <h2 style={{ fontFamily: "var(--font-display)", fontSize: "1.2rem", fontWeight: 700 }}>Add New Creator</h2>
-              <button onClick={() => setShowModal(false)} style={{ background: "none", border: "none", cursor: "pointer", color: "rgba(17,17,17,0.5)" }}>✕</button>
+              <button onClick={() => setShowModal(false)} style={{ background: "none", border: "none", cursor: "pointer", color: "rgba(17,17,17,0.5)", fontSize: "1.2rem" }}>✕</button>
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-              <div>
-                <label className="label">Creator Name</label>
-                <input className="input-field" placeholder="Full name" value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} />
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+                <div><label className="label">Creator Name *</label><input className="input-field" placeholder="Full name" value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} /></div>
+                <div><label className="label">Handle *</label><input className="input-field" placeholder="@username" value={form.handle} onChange={e => setForm(f => ({ ...f, handle: e.target.value }))} /></div>
               </div>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
                 <div>
-                  <label className="label">Category</label>
-                  <select className="input-field" value={form.category} onChange={e => setForm(f => ({ ...f, category: e.target.value }))}>
-                    <option value="">Select...</option>
-                    {["Lifestyle", "Fitness", "Fashion", "Technology", "Finance", "Food"].map(c => <option key={c}>{c}</option>)}
+                  <label className="label">Platform</label>
+                  <select className="input-field" value={form.platform} onChange={e => setForm(f => ({ ...f, platform: e.target.value, platforms: [e.target.value] }))}>
+                    <option>Instagram</option><option>YouTube</option><option>Twitter</option><option>LinkedIn</option>
                   </select>
                 </div>
                 <div>
-                  <label className="label">Followers</label>
-                  <input className="input-field" placeholder="e.g. 1.2M" value={form.followers} onChange={e => setForm(f => ({ ...f, followers: e.target.value }))} />
+                  <label className="label">Category</label>
+                  <select className="input-field" value={form.category} onChange={e => setForm(f => ({ ...f, category: e.target.value }))}>
+                    {["Lifestyle", "Fitness", "Fashion", "Tech", "Finance", "Food", "Beauty", "Travel"].map(c => <option key={c}>{c}</option>)}
+                  </select>
                 </div>
+              </div>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12 }}>
+                <div><label className="label">Followers</label><input className="input-field" placeholder="e.g. 245K" value={form.followers} onChange={e => setForm(f => ({ ...f, followers: e.target.value }))} /></div>
+                <div><label className="label">Rate</label><input className="input-field" placeholder="₹25K/post" value={form.rate} onChange={e => setForm(f => ({ ...f, rate: e.target.value }))} /></div>
+                <div><label className="label">Engagement</label><input className="input-field" placeholder="4.8%" value={form.engagement} onChange={e => setForm(f => ({ ...f, engagement: e.target.value }))} /></div>
               </div>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
-                <div>
-                  <label className="label">Instagram Handle</label>
-                  <input className="input-field" placeholder="@username" value={form.instagram} onChange={e => setForm(f => ({ ...f, instagram: e.target.value }))} />
-                </div>
-                <div>
-                  <label className="label">YouTube Channel</label>
-                  <input className="input-field" placeholder="Channel name" value={form.youtube} onChange={e => setForm(f => ({ ...f, youtube: e.target.value }))} />
-                </div>
+                <div><label className="label">Location</label><input className="input-field" placeholder="e.g. Mumbai" value={form.location} onChange={e => setForm(f => ({ ...f, location: e.target.value }))} /></div>
+                <div><label className="label">Avatar URL</label><input className="input-field" placeholder="https://..." value={form.avatar} onChange={e => setForm(f => ({ ...f, avatar: e.target.value }))} /></div>
               </div>
-              <div>
-                <label className="label">Engagement Rate %</label>
-                <input className="input-field" placeholder="e.g. 8.4" value={form.engagement} onChange={e => setForm(f => ({ ...f, engagement: e.target.value }))} />
+              <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 4 }}>
+                <input type="checkbox" id="verified" checked={form.verified} onChange={e => setForm(f => ({ ...f, verified: e.target.checked }))} style={{ width: 16, height: 16 }} />
+                <label htmlFor="verified" style={{ fontSize: "0.85rem", fontWeight: 600, color: "#111111", cursor: "pointer" }}>Verified Creator</label>
               </div>
-              <div style={{ display: "flex", gap: 10, marginTop: 4 }}>
+              <div style={{ display: "flex", gap: 10, marginTop: 12 }}>
                 <button onClick={() => setShowModal(false)} className="btn-secondary" style={{ flex: 1, justifyContent: "center" }}>Cancel</button>
-                <button className="btn-primary" style={{ flex: 1, justifyContent: "center" }} onClick={() => setShowModal(false)}>
+                <button className="btn-primary" style={{ flex: 1, justifyContent: "center" }} onClick={handleAdd}>
                   Add Creator
                 </button>
               </div>

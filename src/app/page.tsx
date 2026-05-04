@@ -3,7 +3,6 @@ import Footer from "@/components/ui/Footer";
 import HeroSection from "@/components/sections/HeroSection";
 import ServicesSection from "@/components/sections/ServicesSection";
 import CreatorShowcase from "@/components/sections/CreatorShowcase";
-import CaseStudyOrbit from "@/components/sections/CaseStudyOrbit";
 import AnalyticsSection from "@/components/sections/AnalyticsSection";
 import TestimonialsSection from "@/components/sections/TestimonialsSection";
 import PricingSection from "@/components/sections/PricingSection";
@@ -19,7 +18,6 @@ export default function HomePage() {
         <TickerSection />
         <ServicesSection />
         <CreatorShowcase />
-        <CaseStudyOrbit />
         <AnalyticsSection />
         <TestimonialsSection />
         <PricingSection />

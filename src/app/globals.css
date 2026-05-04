@@ -299,8 +299,9 @@ h1, h2, h3, h4, h5, h6 {
 
 .card-service:hover {
   border-color: rgba(220,38,38,0.35);
-  transform: translateY(-6px) scale(1.03);
-  box-shadow: 0 30px 80px rgba(0,0,0,0.5), 0 0 60px rgba(220,38,38,0.12);
+  transform: translateY(-8px) scale(1.06);
+  box-shadow: 0 30px 80px rgba(0,0,0,0.12), 0 0 60px rgba(220,38,38,0.12);
+  z-index: 10;
 }
 
 /* ─── SECTION STYLES ─── */
@@ -550,11 +551,16 @@ h1, h2, h3, h4, h5, h6 {
   background: var(--glass-bg);
   border: 1px solid var(--glass-border);
   border-radius: 10px;
-  color: white;
+  color: var(--white);
   font-family: var(--font-body);
   font-size: 0.9rem;
   transition: all 0.2s;
   outline: none;
+}
+
+select.input-field option {
+  background-color: var(--charcoal);
+  color: var(--white);
 }
 
 .input-field:focus {
@@ -671,7 +677,7 @@ h1, h2, h3, h4, h5, h6 {
   letter-spacing: 0.06em;
   text-transform: uppercase;
   border-bottom: 1px solid var(--charcoal-border);
-  background: rgba(255,255,255,0.02);
+  background: var(--white-05);
 }
 
 .data-table td {
@@ -683,8 +689,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .data-table tr:hover td {
-  background: rgba(255,255,255,0.02);
-  color: white;
+  background: var(--white-05);
+  color: var(--white);
 }
 
 /* ─── HERO SPECIFIC ─── */

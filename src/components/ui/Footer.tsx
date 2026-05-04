@@ -81,13 +81,7 @@ export default function Footer() {
           {/* Brand Column */}
           <div>
             <Link href="/" style={{ textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 10, marginBottom: 20 }}>
-              <div style={{
-                width: 36, height: 36, borderRadius: 8,
-                background: "linear-gradient(135deg, #dc2626, #7f1d1d)",
-                display: "flex", alignItems: "center", justifyContent: "center",
-              }}>
-                <Zap size={18} color="#111111" strokeWidth={2.5} />
-              </div>
+              <img src="/tcc-logo.png" alt="TCC Logo" style={{ height: 36, width: "auto", borderRadius: 8 }} />
               <div>
                 <span style={{ fontFamily: "var(--font-display)", fontWeight: 800, fontSize: "1.1rem", color: "#111111" }}>TCC</span>
                 <span style={{ display: "block", fontSize: "0.55rem", color: "rgba(17,17,17,0.4)", letterSpacing: "0.12em", textTransform: "uppercase" }}>
