@@ -21,8 +21,8 @@ export default function PrivacyPage() {
               { title: "Information Sharing", body: "We do not sell, trade, or otherwise transfer your personal information to third parties without your consent, except to provide our services (e.g., payment processors, analytics providers). We may share information if required by law or to protect our rights." },
               { title: "Data Security", body: "We implement industry-standard security measures to protect your information. All data is encrypted in transit and at rest. We regularly audit our security practices and update them to address new threats." },
               { title: "Cookies", body: "We use cookies and similar tracking technologies to track activity on our platform and hold certain information. You can instruct your browser to refuse all cookies or to indicate when a cookie is being sent." },
-              { title: "Your Rights", body: "You have the right to access, correct, or delete your personal information at any time. You can opt out of marketing communications by clicking the unsubscribe link in our emails. Contact us at hello@thecreatorconnect.com to exercise your rights." },
-              { title: "Contact Us", body: "If you have any questions about this Privacy Policy, please contact us at hello@thecreatorconnect.com or write to us at TCC — The Creator Connect, Mumbai, Maharashtra, India." },
+              { title: "Your Rights", body: "You have the right to access, correct, or delete your personal information at any time. You can opt out of marketing communications by clicking the unsubscribe link in our emails. Contact us at team@thecreatorconnect.shop to exercise your rights." },
+              { title: "Contact Us", body: "If you have any questions about this Privacy Policy, please contact us at team@thecreatorconnect.shop or write to us at TCC — The Creator Connect, Mumbai, Maharashtra, India." },
             ].map(section => (
               <div key={section.title} style={{ marginBottom: 36 }}>
                 <h2 style={{ fontFamily: "var(--font-display)", fontSize: "1.2rem", fontWeight: 700, marginBottom: 12, color: "#111111" }}>{section.title}</h2>

@@ -5,7 +5,7 @@ import { Plus, Edit, Trash2, ToggleLeft, ToggleRight } from "lucide-react";
 const INITIAL_CONTENT = {
   hero: { heading: "WHERE BRANDS MEET INFLUENCE.", subheading: "TCC helps brands scale through creator-led marketing powered by AI systems, analytics, and performance-driven campaigns.", ctaText: "Book a Strategy Call" },
   about: { tagline: "India's #1 Creator Marketing Platform", stats: [{ label: "Creators Network", value: "500+" }, { label: "Revenue Generated", value: "₹50Cr+" }, { label: "Brand Campaigns", value: "200+" }, { label: "Client Retention", value: "98%" }] },
-  footer: { email: "hello@thecreatorconnect.com", phone: "+91 98765 43210", address: "Mumbai, Maharashtra, India" },
+  footer: { email: "team@thecreatorconnect.shop", phone: "+91 89501 53750", address: "Mumbai, Maharashtra, India" },
 };
 
 export default function AdminCMS() {

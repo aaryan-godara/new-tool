@@ -228,7 +228,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             }}>A</div>
             <div>
               <div style={{ fontSize: "0.8rem", fontWeight: 600, color: "#111111" }}>Admin</div>
-              <div style={{ fontSize: "0.65rem", color: "rgba(17,17,17,0.35)" }}>hello@thecreatorconnect.com</div>
+              <div style={{ fontSize: "0.65rem", color: "rgba(17,17,17,0.35)" }}>team@thecreatorconnect.shop</div>
             </div>
           </div>
           <button onClick={handleLogout} className="sidebar-link" style={{ width: "100%", border: "none", background: "none", cursor: "pointer", textAlign: "left" }}>

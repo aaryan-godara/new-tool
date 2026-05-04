@@ -172,8 +172,8 @@ export default function ContactSection() {
                   <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
                     <div>
                       <label className="label">Phone</label>
-                      <input className="input-field" placeholder="+91 98765 43210" value={form.phone}
-                        onChange={e => setForm(f => ({ ...f, phone: e.target.value }))} />
+                      <input className="input-field" placeholder="+91 89501 53750" value={form.phone}
+                        onChange={(e) => setForm({ ...form, phone: e.target.value })} />
                     </div>
                     <div>
                       <label className="label">Company</label>

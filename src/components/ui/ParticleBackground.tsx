@@ -76,7 +76,7 @@ export default function ParticleBackground() {
                 default: "bounce",
               },
               random: false,
-              speed: 0.6,
+              speed: 1.5,
               straight: false,
             },
             number: {
@@ -85,7 +85,7 @@ export default function ParticleBackground() {
                 width: 800,
                 height: 800,
               },
-              value: 60,
+              value: 40,
             },
             opacity: {
               value: 0.4,
@@ -97,7 +97,7 @@ export default function ParticleBackground() {
               value: { min: 1, max: 2.5 },
             },
             shadow: {
-              enable: true,
+              enable: false,
               color: "#ff2d2d",
               blur: 15,
             }

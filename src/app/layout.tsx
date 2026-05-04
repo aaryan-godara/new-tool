@@ -67,6 +67,8 @@ export const metadata: Metadata = {
   },
 };
 
+import SmoothScrolling from "@/components/ui/SmoothScrolling";
+
 export default function RootLayout({
   children,
 }: {
@@ -86,7 +88,9 @@ export default function RootLayout({
         <meta name="theme-color" content="#dc2626" />
       </head>
       <body suppressHydrationWarning>
-        {children}
+        <SmoothScrolling>
+          {children}
+        </SmoothScrolling>
       </body>
     </html>
   );

@@ -5,27 +5,27 @@ import { Zap, Camera, MessageCircle, Briefcase, Video, Mail, Phone, MapPin, Arro
 
 const FOOTER_LINKS = {
   Services: [
-    { label: "Influencer Marketing", href: "/services/influencer-marketing" },
-    { label: "Creator Campaigns", href: "/services/creator-campaigns" },
-    { label: "UGC Production", href: "/services/ugc-production" },
-    { label: "Instagram Growth", href: "/services/instagram-growth" },
-    { label: "AI Content Systems", href: "/services/ai-content-systems" },
-    { label: "Paid Ads", href: "/services/paid-ads" },
+    { label: "Influencer Marketing", href: "/services" },
+    { label: "Creator Campaigns", href: "/services" },
+    { label: "UGC Production", href: "/services" },
+    { label: "Instagram Growth", href: "/services" },
+    { label: "AI Content Systems", href: "/services" },
+    { label: "Paid Ads", href: "/services" },
   ],
   Company: [
     { label: "About Us", href: "/about" },
     { label: "Case Studies", href: "/case-studies" },
     { label: "Blog", href: "/blog" },
-    { label: "Careers", href: "/careers" },
-    { label: "Team", href: "/team" },
+    { label: "Careers", href: "/about" },
+    { label: "Team", href: "/about" },
     { label: "Pricing", href: "/pricing" },
   ],
   Creators: [
     { label: "Join as Creator", href: "/creators/join" },
     { label: "Creator Showcase", href: "/creators" },
-    { label: "Creator Portal", href: "/creators/portal" },
-    { label: "Content Guidelines", href: "/creators/guidelines" },
-    { label: "Earnings", href: "/creators/earnings" },
+    { label: "Creator Portal", href: "/creators" },
+    { label: "Content Guidelines", href: "/creators" },
+    { label: "Earnings", href: "/creators" },
   ],
 };
 
@@ -191,7 +191,7 @@ export default function Footer() {
             {[
               { label: "Privacy Policy", href: "/privacy" },
               { label: "Terms & Conditions", href: "/terms" },
-              { label: "Cookie Policy", href: "/cookies" },
+              { label: "Cookie Policy", href: "/privacy" },
             ].map(link => (
               <Link key={link.href} href={link.href} style={{
                 color: "rgba(17,17,17,0.3)",

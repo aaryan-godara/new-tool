@@ -4,9 +4,9 @@ export const BRAND = {
   tagline: "WHERE BRANDS MEET INFLUENCE.",
   description:
     "TCC helps brands scale through creator-led marketing powered by AI systems, analytics, and performance-driven campaigns.",
-  email: "hello@thecreatorconnect.com",
-  phone: "+91 98765 43210",
-  whatsapp: "+919876543210",
+  email: "team@thecreatorconnect.shop",
+  phone: "+91 89501 53750",
+  whatsapp: "+918950153750",
   address: "Mumbai, Maharashtra, India",
   socials: {
     instagram: "https://instagram.com/thecreatorconnect",
